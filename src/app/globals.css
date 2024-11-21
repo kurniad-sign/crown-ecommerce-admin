@@ -2,26 +2,100 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --grey-50: #f9fafb;
+    --grey-75: #f7f9fc;
+    --grey-100: #f0f2f5;
+    --grey-200: #e4e7ec;
+    --grey-300: #d0d5dd;
+    --grey-400: #98a2b3;
+    --grey-500: #667185;
+    --grey-600: #475367;
+    --grey-700: #344054;
+    --grey-800: #1d2739;
+    --grey-900: #101928;
+
+    --primary-50: #ffece5;
+    --primary-75: #fcd2c2;
+    --primary-100: #fcb59a;
+    --primary-200: #fa9874;
+    --primary-300: #f77a4a;
+    --primary-400: #f56630;
+    --primary-500: #eb5017;
+    --primary-600: #cc400c;
+    --primary-700: #ad3307;
+    --primary-800: #8f2802;
+    --primary-900: #711e00;
+
+    --secondary-50: #e3effc;
+    --secondary-75: #c6ddf7;
+    --secondary-100: #b6d8ff;
+    --secondary-200: #80bbff;
+    --secondary-300: #3d89df;
+    --secondary-400: #1671d9;
+    --secondary-500: #0d5eba;
+    --secondary-600: #034592;
+    --secondary-700: #04326b;
+    --secondary-800: #012657;
+    --secondary-900: #001633;
+
+    --success-50: #e7f6ec;
+    --success-75: #b5e3c4;
+    --success-100: #91d6a8;
+    --success-200: #5fc381;
+    --success-300: #40b869;
+    --success-400: #0f973d;
+    --success-500: #099137;
+    --success-600: #04802e;
+    --success-700: #036b26;
+    --success-800: #015b20;
+    --success-900: #004617;
+
+    --warning-50: #fef6e7;
+    --warning-75: #fbe2b7;
+    --warning-100: #f7d394;
+    --warning-200: #f7c164;
+    --warning-300: #f5b546;
+    --warning-400: #f3a218;
+    --warning-500: #dd900d;
+    --warning-600: #ad6f07;
+    --warning-700: #865503;
+    --warning-800: #664101;
+    --warning-900: #523300;
+
+    --error-50: #fbeae9;
+    --error-75: #f2bcba;
+    --error-100: #eb9b98;
+    --error-200: #e26e6a;
+    --error-300: #dd524d;
+    --error-400: #d42620;
+    --error-500: #cb1a14;
+    --error-600: #ba110b;
+    --error-700: #9e0a05;
+    --error-800: #800501;
+    --error-900: #591000;
+
+    --office-brown-50: #fbf1f1;
+    --office-brown-75: #f0e6e6;
+    --office-brown-100: #e4dbdb;
+    --office-brown-200: #cdc4c4;
+    --office-brown-300: #b7afaf;
+    --office-brown-400: #a29999;
+    --office-brown-500: #8d8484;
+    --office-brown-600: #787070;
+    --office-brown-700: #645d5d;
+    --office-brown-800: #514a4a;
+    --office-brown-900: #3e3838;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
+@layer base {
+  body {
+    @apply font-general-sans rayna-ui relative flex min-h-dvh w-full flex-col overflow-x-hidden bg-background font-[450] text-foreground;
+  }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  img {
+    @apply inline-block;
   }
 }
