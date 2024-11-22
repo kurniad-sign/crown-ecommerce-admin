@@ -13,6 +13,7 @@
     "^types$",
     "^~/app/(.*)$",
     "^~/components/(.*)$",
+    "^~/features/(.*)$",
     "^~/layouts/(.*)$",
     "^~/lib/(.*)$",
     "^~/utils/(.*)$",
