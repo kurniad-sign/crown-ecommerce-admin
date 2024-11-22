@@ -1,9 +1,9 @@
+import { useParams, usePathname } from 'next/navigation';
 import { cn } from '@nextui-org/react';
 import { Expand, Home, Palette, PieChart, Shapes } from 'lucide-react';
-import Link from 'next/link';
-import { useParams, usePathname } from 'next/navigation';
-import { Text } from '~/components/atom';
+import { Link } from 'nextjs13-progress';
 
+import { Text } from '~/components/atom';
 
 interface SideMenuItem {
   key: string;
@@ -18,7 +18,7 @@ interface SideMenuItem {
 
 export function SidebarMenuItem() {
   const pathname = usePathname();
-  const params = useParams()
+  const params = useParams();
 
   const menuItem: SideMenuItem[] = [
     {
