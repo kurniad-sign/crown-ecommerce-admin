@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import localFont from 'next/font/local';
 import { cn } from '@nextui-org/react';
 import { Next13NProgress } from 'nextjs13-progress';
+import { Toaster } from 'sonner';
 
 import './globals.css';
 
@@ -30,6 +31,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={cn(generalSans.variable, inter.variable)}>
         <Next13NProgress color="#f56630" />
+        <Toaster position="top-right" />
         <ReactQueryProvider>
           <NextUIProvider>{children}</NextUIProvider>
         </ReactQueryProvider>
