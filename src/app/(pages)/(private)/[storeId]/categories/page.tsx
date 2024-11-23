@@ -2,6 +2,7 @@ import { Heading, Text } from '~/components/atom';
 
 import { CategoryCreateButton } from '~/features/categories/components/CategoryCreateButton';
 import { TableCategories } from '~/features/categories/components/TableCategories';
+import { TableDataCategories } from '~/features/categories/components/TableData';
 
 export default function CategoryPage({ params }: { params: {storeId: string} }) {
   return (
@@ -17,7 +18,7 @@ export default function CategoryPage({ params }: { params: {storeId: string} }) 
         </div>
         <CategoryCreateButton />
       </div>
-      <TableCategories storeId={params.storeId} />
+      <TableDataCategories storeId={params.storeId} />
     </div>
   );
 }
