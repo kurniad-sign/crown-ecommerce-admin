@@ -1,5 +1,5 @@
 {
-  "id": "33460a0e-669a-47ba-ab44-0ddf08dfa0d2",
+  "id": "802719e6-0c6d-41ab-bf1b-0ed4be980e71",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -10,6 +10,13 @@
       "columns": {
         "id": {
           "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "parent_id": {
+          "name": "parent_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": false,
@@ -45,6 +52,19 @@
       },
       "indexes": {},
       "foreignKeys": {
+        "categories_parent_id_categories_id_fk": {
+          "name": "categories_parent_id_categories_id_fk",
+          "tableFrom": "categories",
+          "tableTo": "categories",
+          "columnsFrom": [
+            "parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
         "categories_store_id_stores_id_fk": {
           "name": "categories_store_id_stores_id_fk",
           "tableFrom": "categories",
@@ -57,28 +77,15 @@
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
-        },
-        "custom_fk": {
-          "name": "custom_fk",
-          "tableFrom": "categories",
-          "tableTo": "categories",
-          "columnsFrom": [
-            "id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "categories_id_unique": {
-          "name": "categories_id_unique",
+        "categories_parent_id_unique": {
+          "name": "categories_parent_id_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "id"
+            "parent_id"
           ]
         }
       },
