@@ -1,6 +1,6 @@
 import { InferSelectModel, relations, sql } from 'drizzle-orm';
 import {
-  foreignKey,
+  AnyPgColumn,
   pgTable,
   timestamp,
   uuid,
@@ -15,12 +15,13 @@ export const categoriesSchema = pgTable(
     id: uuid('id')
       .default(sql`uuid_generate_v7()`)
       .defaultRandom()
-      .notNull()
-      .primaryKey(),
-    parentId: uuid('id')
+      .primaryKey()
+      .notNull(),
+    parentId: uuid('parent_id')
       .default(sql`uuid_generate_v7()`)
       .defaultRandom()
-      .unique(),
+      .unique()
+      .references((): AnyPgColumn => categoriesSchema.id),
     name: varchar('name', { length: 100 }).notNull(),
     storeId: uuid('store_id')
       .default(sql`uuid_generate_v7()`)
@@ -29,16 +30,16 @@ export const categoriesSchema = pgTable(
       .references(() => stores.id),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().notNull(),
-  },
-  (table) => {
-    return {
-      parentReference: foreignKey({
-        columns: [table.parentId],
-        foreignColumns: [table.id],
-        name: 'custom_fk',
-      }),
-    };
   }
+  // (table) => {
+  //   return {
+  //     parentReference: foreignKey({
+  //       columns: [table.parentId],
+  //       foreignColumns: [table.id],
+  //       name: 'custom_parent_category',
+  //     }),
+  //   };
+  // }
 );
 
 export const categoriesRelations = relations(categoriesSchema, ({ one }) => ({

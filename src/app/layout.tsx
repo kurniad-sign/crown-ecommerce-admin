@@ -31,7 +31,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={cn(generalSans.variable, inter.variable)}>
         <Next13NProgress color="#f56630" />
-        <Toaster position="top-right" />
+        <Toaster richColors position="top-right" />
         <ReactQueryProvider>
           <NextUIProvider>{children}</NextUIProvider>
         </ReactQueryProvider>

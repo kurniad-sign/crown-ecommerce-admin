@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Button } from '@nextui-org/react';
 import {
   Table,
@@ -11,97 +11,106 @@ import {
   TableRow,
 } from '@nextui-org/table';
 import { Tooltip } from '@nextui-org/tooltip';
+import { format } from 'date-fns';
 import { Edit, Trash } from 'lucide-react';
 
+import { CategoryDataType } from '~/lib/drizzle/schemas/categories';
+import { uniqueId } from '~/lib/unique-id';
+
 interface TableCategoriesProps {
-  storeId?: string;
+  items: CategoryDataType[];
 }
 
 const tableColumns = [
   {
     key: 'name',
     label: 'Name',
+    width: 200,
   },
   {
-    key: 'role',
-    label: 'Role',
+    key: 'parentId',
+    label: 'Parent Category',
+    width: 200,
   },
   {
-    key: 'created_at',
+    key: 'createdAt',
     label: 'Created Date',
   },
   {
-    key: 'updated_at',
+    key: 'updatedAt',
     label: 'Updated Date',
   },
   {
     key: 'actions',
     label: 'Actions',
+    width: 100,
   },
 ];
 
-const rows = [
-  {
-    key: '1',
-    name: 'Tony Reichert',
-    role: 'CEO',
-    status: 'Active',
-  },
-  {
-    key: '2',
-    name: 'Zoey Lang',
-    role: 'Technical Lead',
-    status: 'Paused',
-  },
-  {
-    key: '3',
-    name: 'Jane Fisher',
-    role: 'Senior Developer',
-    status: 'Active',
-  },
-  {
-    key: '4',
-    name: 'William Howard',
-    role: 'Community Manager',
-    status: 'Vacation',
-  },
-];
+type ColumnKey = (typeof tableColumns)[number]['key'];
+interface TableCategory extends CategoryDataType {
+  key: string;
+}
 
 export function TableCategories(props: TableCategoriesProps) {
-  const renderCell = useCallback((user: any, columnKey: string | number) => {
-    const cellValue = user[columnKey];
+  const { items } = props;
 
-    switch (columnKey) {
-      case 'actions':
-        return (
-          <div className="relative flex items-center gap-1">
-            <Tooltip content="Edit category">
-              <Button isIconOnly size="sm" variant="light">
-                <Edit size={12} />
-              </Button>
-            </Tooltip>
-            <Tooltip content="Delete category">
-              <Button isIconOnly size="sm" variant="light" color="danger">
-                <Trash size={12} />
-              </Button>
-            </Tooltip>
-          </div>
-        );
-      default:
-        return cellValue;
-    }
-  }, []);
+  const tableItems = useMemo(() => {
+    return items.map((item) => ({
+      ...item,
+      key: uniqueId(),
+    }));
+  }, [items]);
+
+  const renderCell = useCallback(
+    (category: TableCategory, columnKey: ColumnKey) => {
+      const columnRenderers: Record<ColumnKey, () => string | React.ReactNode> =
+        {
+          name: () => category.name,
+          parentId: () => category.parentId ?? '-',
+          createdAt: () =>
+            category.createdAt
+              ? format(new Date(category.createdAt), 'dd MMM yyyy')
+              : '-',
+          updatedAt: () =>
+            category.updatedAt
+              ? format(new Date(category.updatedAt), 'dd MMM yyyy')
+              : '-',
+          actions: () => (
+            <div className="relative flex items-center gap-1">
+              <Tooltip content="Edit category">
+                <Button isIconOnly size="sm" variant="light">
+                  <Edit size={12} />
+                </Button>
+              </Tooltip>
+              <Tooltip content="Delete category">
+                <Button isIconOnly size="sm" variant="light" color="danger">
+                  <Trash size={12} />
+                </Button>
+              </Tooltip>
+            </div>
+          ),
+        };
+
+      return columnRenderers[columnKey]() ?? '-';
+    },
+    []
+  );
 
   return (
     <Table isStriped aria-label="Table with data categories" className="mt-10">
       <TableHeader columns={tableColumns}>
-        {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
+        {(column) => (
+          <TableColumn width={column.width} key={column.key}>
+            {column.label}
+          </TableColumn>
+        )}
       </TableHeader>
-      <TableBody items={rows}>
+      <TableBody items={tableItems}>
         {(item) => (
           <TableRow key={item.key}>
             {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
+              <TableCell>{renderCell(item, columnKey as ColumnKey)}</TableCell>
             )}
           </TableRow>
         )}

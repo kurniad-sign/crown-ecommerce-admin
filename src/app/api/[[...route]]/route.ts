@@ -2,12 +2,16 @@ import { Hono } from 'hono';
 import { handle } from 'hono/vercel';
 
 import auth from './auth';
-import stores from './stores'
+import categories from './categories';
+import stores from './stores';
 
 export const runtime = 'nodejs';
 
 const app = new Hono().basePath('/api');
-export const routes = app.route('/auth', auth).route('/stores', stores);
+export const routes = app
+  .route('/auth', auth)
+  .route('/stores', stores)
+  .route('/:storeId/category', categories);
 
 export const GET = handle(app);
 export const POST = handle(app);

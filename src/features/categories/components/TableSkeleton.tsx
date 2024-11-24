@@ -7,7 +7,7 @@ export function TableSkeleton() {
   return (
     <Card radius="sm" className="h-[200px] mt-10">
       <CardBody className="flex items-center justify-center">
-        <CircularProgress color="primary" size="lg" aria-label="Loading..." />
+        <CircularProgress color="primary" size="lg" aria-label="Loading..." isIndeterminate />
       </CardBody>
     </Card>
   );
