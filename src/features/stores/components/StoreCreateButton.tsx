@@ -66,7 +66,7 @@ export function StoreCreateButton({ store }: CreateStoreProps) {
     },
     onSuccess: (response) => {
       console.log(response.data);
-      router.replace(`/${response.data.storeId}`);
+      router.replace(`/${response.data.id}`);
     },
     onError: (error) => {
       console.error(error);

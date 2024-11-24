@@ -39,7 +39,7 @@ export async function StoreList() {
           <CardHeader className="z-[99]">
             <StoreDeleteButton id={store.id} />
           </CardHeader>
-          <CardBody as={Link} className="pt-8" href={`/${store.storeId}`}>
+          <CardBody as={Link} className="pt-8" href={`/${store.id}`}>
             <Chip size="sm" variant="flat">
               <Text component="span" size="xsmall" className="text-gray-600">
                 {store.storeId}
