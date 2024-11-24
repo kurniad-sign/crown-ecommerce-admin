@@ -1,4 +1,5 @@
 import { getCategories } from "../api/category.server"
+import { TableCategories } from "./TableCategories"
 
 export async function TableDataCategories({ storeId }: { storeId: string }) {
   const categories = await getCategories(storeId)
@@ -6,8 +7,6 @@ export async function TableDataCategories({ storeId }: { storeId: string }) {
   console.log(categories)
 
   return (
-    <div>
-      Table Data Server Wrapper
-    </div>
+   <TableCategories />
   )
 }

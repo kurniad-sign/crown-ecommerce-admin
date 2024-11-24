@@ -14,7 +14,7 @@ import { Tooltip } from '@nextui-org/tooltip';
 import { Edit, Trash } from 'lucide-react';
 
 interface TableCategoriesProps {
-  storeId: string;
+  storeId?: string;
 }
 
 const tableColumns = [

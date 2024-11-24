@@ -1,10 +1,21 @@
+import { Metadata } from 'next';
+import { Suspense } from 'react';
+
 import { Heading, Text } from '~/components/atom';
 
 import { CategoryCreateButton } from '~/features/categories/components/CategoryCreateButton';
-import { TableCategories } from '~/features/categories/components/TableCategories';
 import { TableDataCategories } from '~/features/categories/components/TableData';
+import { TableSkeleton } from '~/features/categories/components/TableSkeleton';
 
-export default function CategoryPage({ params }: { params: {storeId: string} }) {
+export const metadata: Metadata = {
+  title: 'Categories | Crown',
+};
+
+export default function CategoryPage({
+  params,
+}: {
+  params: { storeId: string };
+}) {
   return (
     <div className="py-5">
       <div className="flex items-end justify-between">
@@ -18,7 +29,9 @@ export default function CategoryPage({ params }: { params: {storeId: string} }) 
         </div>
         <CategoryCreateButton />
       </div>
-      <TableDataCategories storeId={params.storeId} />
+      <Suspense fallback={<TableSkeleton />}>
+        <TableDataCategories storeId={params.storeId} />
+      </Suspense>
     </div>
   );
 }
