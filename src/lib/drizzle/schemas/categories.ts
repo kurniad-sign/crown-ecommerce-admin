@@ -1,10 +1,13 @@
 import { InferSelectModel, relations, sql } from 'drizzle-orm';
-import { AnyPgColumn, pgTable, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
-
-
+import {
+  AnyPgColumn,
+  pgTable,
+  timestamp,
+  uuid,
+  varchar,
+} from 'drizzle-orm/pg-core';
 
 import { stores } from './stores';
-
 
 export const categoriesSchema = pgTable('categories', {
   id: uuid('id')
@@ -26,10 +29,10 @@ export const categoriesSchema = pgTable('categories', {
 export const categoryRelations = relations(categoriesSchema, ({ one }) => ({
   parent: one(categoriesSchema, {
     fields: [categoriesSchema.parentId],
-    references: [categoriesSchema.id]
-  })
+    references: [categoriesSchema.id],
+  }),
 }));
 
 export type CategoryDataType = InferSelectModel<typeof categoriesSchema> & {
-  parent?: CategoryDataType | null
+  parent?: CategoryDataType | null;
 };

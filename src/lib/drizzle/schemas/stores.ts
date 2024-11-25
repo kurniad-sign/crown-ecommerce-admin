@@ -1,5 +1,7 @@
-import { InferSelectModel, sql } from 'drizzle-orm';
+import { InferSelectModel, relations, sql } from 'drizzle-orm';
 import { pgTable, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
+
+import { sizeSchema } from './sizes';
 
 export const stores = pgTable('stores', {
   id: uuid('id')
@@ -13,5 +15,11 @@ export const stores = pgTable('stores', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
+
+export const storeRelation = relations(stores, ({ many }) => ({
+  sizes: many(sizeSchema, {
+    relationName: 'StoreToSize',
+  }),
+}));
 
 export type StoresDataType = InferSelectModel<typeof stores>;
