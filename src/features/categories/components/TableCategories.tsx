@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, useMemo } from 'react';
-import { Button } from '@nextui-org/react';
 import {
   Table,
   TableBody,
@@ -10,12 +9,13 @@ import {
   TableHeader,
   TableRow,
 } from '@nextui-org/table';
-import { Tooltip } from '@nextui-org/tooltip';
 import { format } from 'date-fns';
-import { Edit, Trash } from 'lucide-react';
 
 import { CategoryDataType } from '~/lib/drizzle/schemas/categories';
 import { uniqueId } from '~/lib/unique-id';
+
+import { CategoryDeleteButton } from './CategoryDeleteButton';
+import { CategoryUpdateButton } from './CategoryUpdateButton';
 
 interface TableCategoriesProps {
   items: CategoryDataType[];
@@ -48,13 +48,12 @@ const tableColumns = [
 ];
 
 type ColumnKey = (typeof tableColumns)[number]['key'];
-interface TableCategory extends CategoryDataType {
+export interface TableCategory extends CategoryDataType {
   key: string;
 }
 
 export function TableCategories(props: TableCategoriesProps) {
   const { items } = props;
-
   const tableItems = useMemo(() => {
     return items.map((item) => ({
       ...item,
@@ -67,7 +66,7 @@ export function TableCategories(props: TableCategoriesProps) {
       const columnRenderers: Record<ColumnKey, () => string | React.ReactNode> =
         {
           name: () => category.name,
-          parentId: () => category.parentId ?? '-',
+          parentId: () => (category.parent ? category.parent.name : '-'),
           createdAt: () =>
             category.createdAt
               ? format(new Date(category.createdAt), 'dd MMM yyyy')
@@ -78,16 +77,8 @@ export function TableCategories(props: TableCategoriesProps) {
               : '-',
           actions: () => (
             <div className="relative flex items-center gap-1">
-              <Tooltip content="Edit category">
-                <Button isIconOnly size="sm" variant="light">
-                  <Edit size={12} />
-                </Button>
-              </Tooltip>
-              <Tooltip content="Delete category">
-                <Button isIconOnly size="sm" variant="light" color="danger">
-                  <Trash size={12} />
-                </Button>
-              </Tooltip>
+              <CategoryUpdateButton category={category} />
+              <CategoryDeleteButton id={category.id} />
             </div>
           ),
         };
@@ -106,7 +97,7 @@ export function TableCategories(props: TableCategoriesProps) {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody items={tableItems}>
+      <TableBody emptyContent={'No Category Data.'} items={tableItems}>
         {(item) => (
           <TableRow key={item.key}>
             {(columnKey) => (

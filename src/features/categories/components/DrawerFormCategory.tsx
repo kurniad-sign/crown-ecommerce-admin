@@ -2,10 +2,10 @@
 
 import dynamic from 'next/dynamic';
 import { useParams, useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import { Button, Input } from '@nextui-org/react';
+import { useEffect, useMemo } from 'react';
+import { Button, Input, Select, SelectItem } from '@nextui-org/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { PostResponse } from '~/types';
 import { Save } from 'lucide-react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -15,7 +15,12 @@ import { DrawerFooter, DrawerHeader, Heading } from '~/components/atom';
 import { CategoryDataType } from '~/lib/drizzle/schemas/categories';
 import { categorySchema, CategorySchema } from '~/lib/validations/categories';
 
-import { addCategory } from '../api/category.client';
+import {
+  addCategory,
+  getCategories,
+  updateCategory,
+} from '../api/category.client';
+import { type TableCategory } from './TableCategories';
 
 const Drawer = dynamic(
   () => import('~/components/atom').then((component) => component.Drawer),
@@ -25,14 +30,21 @@ const Drawer = dynamic(
 interface DrawerFormCategoryProps {
   isOpenDrawer: boolean;
   onCloseDrawer: () => void;
+  initialData?: TableCategory;
 }
 
 export function DrawerFormCategory({
   isOpenDrawer,
   onCloseDrawer,
+  initialData,
 }: DrawerFormCategoryProps) {
   const params = useParams();
   const router = useRouter();
+
+  const initialForm: CategorySchema = {
+    name: initialData?.name || '',
+    parentId: initialData?.parentId || undefined,
+  };
 
   const {
     control,
@@ -41,9 +53,7 @@ export function DrawerFormCategory({
     reset,
   } = useForm<CategorySchema>({
     resolver: zodResolver(categorySchema),
-    defaultValues: {
-      name: '',
-    },
+    defaultValues: initialForm,
   });
 
   useEffect(() => {
@@ -53,25 +63,60 @@ export function DrawerFormCategory({
     }
   }, [isOpenDrawer, onCloseDrawer, reset]);
 
+  const drawerTitle = useMemo(() => {
+    return initialData ? 'Update Category' : 'Create Category';
+  }, [initialData]);
+
+  const buttonText = useMemo(() => {
+    return initialData ? 'Update' : 'Save';
+  }, [initialData]);
+
+  const toastResponseMessage = useMemo(() => {
+    return {
+      success: initialData
+        ? ' Category updated successfully'
+        : 'Category created successfully',
+      error: initialData
+        ? ' Error when updating category'
+        : 'Error when creating category',
+    };
+  }, [initialData]);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['get-categories'],
+    queryFn: async () =>
+      await getCategories({ storeId: params.storeId as string }),
+    enabled: isOpenDrawer,
+    refetchOnMount: true
+  });
+
   const { mutate, isPending } = useMutation({
-    mutationKey: ['create-category'],
+    mutationKey: ['category-mutation'],
     mutationFn: async (payload: CategorySchema) => {
-      const response = await addCategory({
-        params: { storeId: params.storeId as string },
-        payload,
-      });
+      const response = !initialData
+        ? await addCategory({
+            params: { storeId: params.storeId as string },
+            payload,
+          })
+        : await updateCategory(
+            initialData.id as string,
+            {
+              storeId: params.storeId as string,
+            },
+            payload
+          );
       return (await response.json()) as PostResponse<CategoryDataType>;
     },
     onSuccess: (response) => {
       console.log(response.data);
-      toast.success('Category created successfull');
       router.refresh();
+      toast.success(toastResponseMessage.success);
       onCloseDrawer();
       reset();
     },
     onError: (error) => {
       console.error(error);
-      toast.error('Error when creating category');
+      toast.error(toastResponseMessage.error);
     },
   });
 
@@ -87,10 +132,10 @@ export function DrawerFormCategory({
       >
         <DrawerHeader>
           <Heading component="div" variant="title-5">
-            Create Category
+            {drawerTitle}
           </Heading>
         </DrawerHeader>
-        <div className="relative flex shrink-0 grow flex-col gap-4">
+        <div className="relative flex shrink-0 grow flex-col gap-6">
           <Controller
             name="name"
             control={control}
@@ -107,6 +152,29 @@ export function DrawerFormCategory({
                 isDisabled={isPending}
                 {...field}
               />
+            )}
+          />
+          <Controller
+            name="parentId"
+            control={control}
+            render={({ field }) => (
+              <Select
+                label="Parent Category"
+                labelPlacement="outside"
+                placeholder="Select Parent Category"
+                variant="bordered"
+                defaultSelectedKeys={field.value ? [field.value] : []}
+                isLoading={isLoading}
+                isDisabled={isPending}
+                items={data?.data ?? []}
+                {...field}
+              >
+                {(item) => (
+                  <SelectItem key={item.id} value={item.id}>
+                    {item.name}
+                  </SelectItem>
+                )}
+              </Select>
             )}
           />
         </div>
@@ -129,7 +197,7 @@ export function DrawerFormCategory({
             className="font-medium"
             startContent={!isPending && <Save size={16} strokeWidth={2.5} />}
           >
-            Save
+            {buttonText}
           </Button>
         </DrawerFooter>
       </form>
