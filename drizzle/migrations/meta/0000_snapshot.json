@@ -1,5 +1,5 @@
 {
-  "id": "802719e6-0c6d-41ab-bf1b-0ed4be980e71",
+  "id": "2d09ccac-e4e2-419d-a767-c71de584457d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -13,14 +13,14 @@
           "type": "uuid",
           "primaryKey": true,
           "notNull": true,
-          "default": "gen_random_uuid()"
+          "default": "uuid_generate_v4()"
         },
         "parent_id": {
           "name": "parent_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": false,
-          "default": "gen_random_uuid()"
+          "default": "uuid_generate_v4()"
         },
         "name": {
           "name": "name",
@@ -33,7 +33,7 @@
           "type": "uuid",
           "primaryKey": false,
           "notNull": true,
-          "default": "gen_random_uuid()"
+          "default": "uuid_generate_v4()"
         },
         "created_at": {
           "name": "created_at",
@@ -80,15 +80,7 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "categories_parent_id_unique": {
-          "name": "categories_parent_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "parent_id"
-          ]
-        }
-      },
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -102,11 +94,11 @@
           "type": "uuid",
           "primaryKey": true,
           "notNull": true,
-          "default": "gen_random_uuid()"
+          "default": "uuid_generate_v4()"
         },
         "name": {
           "name": "name",
-          "type": "varchar(255)",
+          "type": "varchar(100)",
           "primaryKey": false,
           "notNull": true
         },
@@ -116,9 +108,9 @@
           "primaryKey": false,
           "notNull": true
         },
-        "storeId": {
-          "name": "storeId",
-          "type": "varchar(255)",
+        "unique_store": {
+          "name": "unique_store",
+          "type": "varchar(50)",
           "primaryKey": false,
           "notNull": false
         },
@@ -146,15 +138,7 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "stores_storeId_unique": {
-          "name": "stores_storeId_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "storeId"
-          ]
-        }
-      },
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
