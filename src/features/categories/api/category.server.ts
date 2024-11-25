@@ -1,27 +1,20 @@
-'use server'
+'use server';
 
-import { db } from "~/lib/drizzle";
-import { createSupabaseServerClient } from "~/lib/supabase/server";
+import { db } from '~/lib/drizzle';
 
 export const getCategories = async (storeId: string) => {
-  const supabase = await createSupabaseServerClient();
-    try {
-      
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+  try {
+    const categories = await db.query.categories.findMany({
+      where: (category, { eq }) => eq(category.storeId, storeId),
+      orderBy: (category, { desc }) => [desc(category.createdAt)],
+      with: {
+        parent: true,
+      },
+    });
 
-      if (!user) {
-        throw new Error('Not authorized')
-      }
-
-      const categories = await db.query.categories.findMany({
-        where: (category, { eq }) => eq(category.storeId, storeId)
-      })
-
-      return categories
-    } catch(error) {
-      console.error(error)
-      throw new Error('Error when fetching categories')
-    }
-}
+    return categories;
+  } catch (error) {
+    console.error(error);
+    throw new Error(`Error when fetching categories, ${error}`);
+  }
+};

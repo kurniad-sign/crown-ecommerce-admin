@@ -8,10 +8,11 @@ import stores from './stores';
 export const runtime = 'nodejs';
 
 const app = new Hono().basePath('/api');
+
 export const routes = app
   .route('/auth', auth)
   .route('/stores', stores)
-  .route('/:storeId/category', categories);
+  .route('/category', categories);
 
 export const GET = handle(app);
 export const POST = handle(app);
