@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 const colorValidationSchema = z.object({
   name: z.string().min(1, { message: 'Size name is required' }),
-  hex_code: z
+  hexCode: z
     .string()
     .regex(/^#[0-9A-F]{6}$/i, { message: 'Invalid hex color code' }),
 });

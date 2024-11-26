@@ -22,7 +22,7 @@ const app = new Hono()
     async (context) => {
       const query = context.req.valid('query');
       const body = context.req.valid('json');
-      const { name, hex_code } = body;
+      const { name, hexCode } = body;
 
       try {
         const storeById = await db.query.stores.findFirst({
@@ -41,7 +41,7 @@ const app = new Hono()
 
         const payload = {
           name,
-          hex_code,
+          hexCode,
           createdAt: new Date(),
           updatedAt: new Date(),
           storeId: storeById.id,
@@ -82,7 +82,7 @@ const app = new Hono()
       const param = context.req.valid('param');
       const query = context.req.valid('query');
       const body = context.req.valid('json');
-      const { name, hex_code } = body;
+      const { name, hexCode } = body;
       const { id } = param;
 
       try {
@@ -103,7 +103,7 @@ const app = new Hono()
         const payload = {
           id,
           name,
-          hex_code,
+          hexCode,
           updatedAt: new Date(),
           storeId: storeById.id,
         };
