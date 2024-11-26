@@ -1,9 +1,21 @@
+import { Metadata } from 'next';
 import { Suspense } from 'react';
 
 import { Heading, Text } from '~/components/atom';
 import { TableSkeleton } from '~/components/molecul/TableSkeleton';
 
-export default function ColorsPage() {
+import { ButtonCreateColor } from '~/features/colors/components/ButttonCreateColor';
+import { TableDataColor } from '~/features/colors/components/TableDataColor';
+
+interface ColorsPageProps {
+  params: { storeId: string };
+}
+
+export const metadata: Metadata = {
+  title: 'Colors | Crown',
+};
+
+export default function ColorsPage({ params: { storeId } }: ColorsPageProps) {
   return (
     <div className="py-5">
       <div className="flex items-end justify-between">
@@ -15,9 +27,11 @@ export default function ColorsPage() {
             Manage color for your product store.
           </Text>
         </div>
-        Button
+        <ButtonCreateColor />
       </div>
-      <Suspense fallback={<TableSkeleton />}>Table</Suspense>
+      <Suspense fallback={<TableSkeleton />}>
+        <TableDataColor storeId={storeId} />
+      </Suspense>
     </div>
   );
 }
