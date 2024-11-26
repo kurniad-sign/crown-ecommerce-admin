@@ -1,14 +1,21 @@
 import { Metadata } from 'next';
+import { Suspense } from 'react';
 
 import { Heading, Text } from '~/components/atom';
+import { TableSkeleton } from '~/components/molecul/TableSkeleton';
 
 import { ButtonCreateSize } from '~/features/sizes/components/ButtonCreateSize';
+import { TableDataSize } from '~/features/sizes/components/TableDataSize';
+
+interface SizePageProps {
+  params: { storeId: string };
+}
 
 export const metadata: Metadata = {
   title: 'Sizes | Crown',
 };
 
-export default function SizePage() {
+export default function SizePage({ params }: SizePageProps) {
   return (
     <div className="py-5">
       <div className="flex items-end justify-between">
@@ -22,6 +29,9 @@ export default function SizePage() {
         </div>
         <ButtonCreateSize />
       </div>
+      <Suspense fallback={<TableSkeleton />}>
+        <TableDataSize storeId={params.storeId} />
+      </Suspense>
     </div>
   );
 }
