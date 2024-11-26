@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1732526268234,
-      "tag": "0000_romantic_daimon_hellstrom",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1732578905859,
-      "tag": "0001_bored_namora",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1732588042689,
-      "tag": "0002_salty_romulus",
+      "when": 1732606521605,
+      "tag": "0000_mixed_thena",
       "breakpoints": true
     }
   ]

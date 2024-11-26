@@ -1,6 +1,9 @@
 import { InferSelectModel, relations, sql } from 'drizzle-orm';
 import { pgTable, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 
+import { categoriesSchema } from './categories';
+import { colorSchema } from './colors';
+import { productSchema } from './products';
 import { sizeSchema } from './sizes';
 
 export const stores = pgTable('stores', {
@@ -17,8 +20,17 @@ export const stores = pgTable('stores', {
 });
 
 export const storeRelation = relations(stores, ({ many }) => ({
+  categories: many(categoriesSchema, {
+    relationName: 'StoreToCategory',
+  }),
   sizes: many(sizeSchema, {
     relationName: 'StoreToSize',
+  }),
+  colors: many(colorSchema, {
+    relationName: 'StoreToColor',
+  }),
+  product: many(productSchema, {
+    relationName: 'StoreToProduct',
   }),
 }));
 
