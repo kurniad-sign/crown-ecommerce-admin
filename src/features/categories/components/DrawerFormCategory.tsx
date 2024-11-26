@@ -87,7 +87,7 @@ export function DrawerFormCategory({
     queryFn: async () =>
       await getCategories({ storeId: params.storeId as string }),
     enabled: isOpenDrawer,
-    refetchOnMount: true
+    refetchOnMount: true,
   });
 
   const { mutate, isPending } = useMutation({

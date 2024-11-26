@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { Button } from '@nextui-org/button';
 import {
   Modal,
@@ -14,7 +15,7 @@ import { Trash } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 import { Text } from '~/components/atom';
-import { useRouter } from 'next/navigation';
+
 import { deleteStore } from '../api/store.client';
 
 type StoreDeleteButtonProps = {
@@ -22,7 +23,7 @@ type StoreDeleteButtonProps = {
 };
 
 export function StoreDeleteButton(props: StoreDeleteButtonProps) {
-  const router = useRouter()
+  const router = useRouter();
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const { id } = props;
 
@@ -61,10 +62,17 @@ export function StoreDeleteButton(props: StoreDeleteButtonProps) {
             <>
               <ModalHeader>Delete Store</ModalHeader>
               <ModalBody>
-                <Text size="small">Are you sure you want to delete this store ?</Text>
+                <Text size="small">
+                  Are you sure you want to delete this store ?
+                </Text>
               </ModalBody>
               <ModalFooter>
-                <Button variant="flat" className="font-medium" isDisabled={isPending} onPress={onClose}>
+                <Button
+                  variant="flat"
+                  className="font-medium"
+                  isDisabled={isPending}
+                  onPress={onClose}
+                >
                   Cancel
                 </Button>
                 <Button

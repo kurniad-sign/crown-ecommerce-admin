@@ -1,8 +1,9 @@
-import { Card, CardBody, CardHeader } from '@nextui-org/card';
 import { Metadata } from 'next';
+import { Card, CardBody, CardHeader } from '@nextui-org/card';
 
 import { Heading, Text } from '~/components/atom';
 import { LogoLight } from '~/components/icon';
+
 import { FormLogin } from '~/features/auth/form-login';
 
 export const metadata: Metadata = {

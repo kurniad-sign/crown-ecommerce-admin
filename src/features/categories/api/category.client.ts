@@ -8,7 +8,9 @@ type AddCategory = {
   payload: CategorySchema;
 };
 
-type GetCategoryResponse = InferResponseType<typeof honoClient.api.category.$get>;
+type GetCategoryResponse = InferResponseType<
+  typeof honoClient.api.category.$get
+>;
 
 type PostCategoryResponse = InferResponseType<
   typeof honoClient.api.category.$post

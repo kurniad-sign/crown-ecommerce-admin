@@ -5,9 +5,14 @@ import { CircularProgress } from '@nextui-org/progress';
 
 export function TableSkeleton() {
   return (
-    <Card radius="sm" className="h-[200px] mt-10">
+    <Card radius="sm" className="mt-10 h-[200px]">
       <CardBody className="flex items-center justify-center">
-        <CircularProgress color="primary" size="lg" aria-label="Loading..." isIndeterminate />
+        <CircularProgress
+          color="primary"
+          size="lg"
+          aria-label="Loading..."
+          isIndeterminate
+        />
       </CardBody>
     </Card>
   );

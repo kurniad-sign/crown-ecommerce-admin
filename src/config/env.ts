@@ -1,10 +1,9 @@
+import dotEnv from 'dotenv';
 import { z } from 'zod';
 
-import dotEnv from 'dotenv'
-
 dotEnv.config({
-  path: '.env'
-})
+  path: '.env',
+});
 
 const createEnv = () => {
   const envSchema = z.object({

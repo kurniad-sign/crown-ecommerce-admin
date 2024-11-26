@@ -3,9 +3,10 @@
 import { Button } from '@nextui-org/react';
 import { PanelLeftClose } from 'lucide-react';
 
-import { SidebarMenuItem } from './SidebarMenuItem';
 import { LogoLight } from '~/components/icon';
 import { CardUserDropdown } from '~/components/molecul/CardUserDropdown';
+
+import { SidebarMenuItem } from './SidebarMenuItem';
 
 export function Sidebar() {
   return (

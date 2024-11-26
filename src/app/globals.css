@@ -92,7 +92,7 @@
 
 @layer base {
   body {
-    @apply font-general-sans rayna-ui relative flex min-h-dvh w-full flex-col overflow-x-hidden bg-background font-[450] text-foreground;
+    @apply relative flex min-h-dvh w-full flex-col overflow-x-hidden bg-background font-general-sans font-[450] text-foreground rayna-ui;
   }
 
   img {

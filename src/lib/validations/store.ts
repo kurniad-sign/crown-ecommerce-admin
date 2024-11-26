@@ -8,4 +8,3 @@ const storeSchema = z.object({
 type StoreSchema = z.infer<typeof storeSchema>;
 
 export { storeSchema, type StoreSchema };
-

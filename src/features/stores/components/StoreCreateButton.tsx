@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardHeader } from '@nextui-org/card';
@@ -17,6 +16,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { PostResponse } from '~/types';
 import { Plus, X } from 'lucide-react';
+import { useRouter } from 'nextjs13-progress';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
@@ -53,8 +53,8 @@ export function StoreCreateButton({ store }: CreateStoreProps) {
   // Handle reset form when close modal if any error form state or when storeid field is opened
   useEffect(() => {
     if (!isOpen) {
-      reset();
       handleCloseStoreId();
+      reset();
     }
   }, [isOpen, reset]);
 

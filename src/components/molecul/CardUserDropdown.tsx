@@ -12,9 +12,9 @@ import {
 } from '@nextui-org/react';
 import { ChevronsUpDown, LogOut, Settings } from 'lucide-react';
 
+import { createSupabaseBrowserClient } from '~/lib/supabase/client';
 
 import { Text } from '../atom';
-import { createSupabaseBrowserClient } from '~/lib/supabase/client';
 
 export function CardUserDropdown() {
   const router = useRouter();

@@ -86,7 +86,7 @@ const app = new Hono()
           statusCode: 200,
         } as PostResponse<StoresDataType>,
         200
-      )
+      );
     } catch (error) {
       console.error(error);
       return context.body('Internal Server Error', 500);

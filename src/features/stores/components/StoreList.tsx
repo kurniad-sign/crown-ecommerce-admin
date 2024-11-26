@@ -21,6 +21,10 @@ export async function StoreList() {
         <CardBody>
           <EmptyStates
             imageSrc={emptyIllustration}
+            imageStyle={{
+              width: 150,
+              height: 150,
+            }}
             title="No store to show"
             description="Looks like you don’t have stores for now. Add new stores to get started."
           >
