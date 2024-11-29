@@ -1,6 +1,12 @@
 import { useParams, usePathname } from 'next/navigation';
 import { cn } from '@nextui-org/react';
-import { Expand, Home, Palette, PieChart, Shapes } from 'lucide-react';
+import {
+  Expand,
+  Palette,
+  PieChart,
+  Shapes,
+  ShoppingBasket,
+} from 'lucide-react';
 import { Link } from 'nextjs13-progress';
 
 import { Text } from '~/components/atom';
@@ -25,15 +31,9 @@ export function SidebarMenuItem() {
       key: 'home-overview',
       children: [
         {
-          label: 'Home',
+          label: 'Dashboard',
           to: `/${params.storeId}`,
           isActive: pathname === `/${params.storeId}`,
-          icon: <Home size={14} strokeWidth={2} className="mr-2" />,
-        },
-        {
-          label: 'Dashboard',
-          to: `/${params.storeId}/dashboard`,
-          isActive: pathname === `/${params.storeId}/dashboard`,
           icon: <PieChart size={14} strokeWidth={2} className="mr-2" />,
         },
       ],
@@ -59,6 +59,18 @@ export function SidebarMenuItem() {
           to: `/${params.storeId}/colors`,
           isActive: pathname === `/${params.storeId}/colors`,
           icon: <Palette size={14} strokeWidth={2} className="mr-2" />,
+        },
+      ],
+    },
+    {
+      key: 'product-list',
+      title: 'Manage',
+      children: [
+        {
+          label: 'Products',
+          to: `/${params.storeId}/products`,
+          isActive: pathname === `/${params.storeId}/products`,
+          icon: <ShoppingBasket size={14} strokeWidth={2} className="mr-2" />,
         },
       ],
     },

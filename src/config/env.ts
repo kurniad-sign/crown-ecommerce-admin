@@ -11,6 +11,7 @@ const createEnv = () => {
     SUPABASE_ANON_KEY: z.string(),
     DATABASE_URL: z.string().min(1).optional(),
     APP_URL: z.string().optional().default('http://localhost:3000/'),
+    API_URL: z.string().optional().default('http://localhost:3000/api/'),
   });
 
   const envVars = {
@@ -18,6 +19,7 @@ const createEnv = () => {
     SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     DATABASE_URL: process.env.DATABASE_URL,
     APP_URL: process.env.NEXT_PUBLIC_URL,
+    API_URL: process.env.API_URL,
   };
 
   const parsedEnv = envSchema.safeParse(envVars);
