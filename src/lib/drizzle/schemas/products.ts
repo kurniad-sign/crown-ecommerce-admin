@@ -11,8 +11,7 @@ import { stores } from './stores';
 export const productSchema = pgTable('products', {
   id: uuid('id')
     .default(sql`uuid_generate_v4()`)
-    .primaryKey()
-    .notNull(),
+    .primaryKey(),
   name: varchar('name', { length: 100 }).notNull(),
   description: text('description'),
   categoryId: uuid('category_id')
@@ -21,8 +20,7 @@ export const productSchema = pgTable('products', {
     .notNull(),
   storeId: uuid('store_id')
     .default(sql`uuid_generate_v4()`)
-    .references(() => stores.id)
-    .notNull(),
+    .references(() => stores.id),
   price: numeric('price', { precision: 10, scale: 2 }).notNull(),
   stock: integer('stock').notNull(),
   createdAt: timestamp('created_at').defaultNow(),

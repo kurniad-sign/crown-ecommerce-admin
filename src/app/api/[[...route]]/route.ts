@@ -2,9 +2,9 @@ import { Hono } from 'hono';
 import { handle } from 'hono/vercel';
 
 import auth from './auth';
-import categories from './categories';
+import categories from './category/category.route';
 import sizes from './sizes';
-import stores from './stores';
+import stores from './stores/store.route';
 import colors from './colors';
 
 export const runtime = 'nodejs';

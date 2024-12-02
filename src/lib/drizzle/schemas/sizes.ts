@@ -6,16 +6,14 @@ import { stores } from './stores';
 export const sizeSchema = pgTable('sizes', {
   id: uuid('id')
     .default(sql`uuid_generate_v4()`)
-    .primaryKey()
-    .notNull(),
+    .primaryKey(),
   name: varchar('name', { length: 50 }).notNull(),
   value: varchar('value', { length: 50 }).notNull(),
   storeId: uuid('store_id')
     .default(sql`uuid_generate_v4()`)
-    .notNull()
     .references(() => stores.id),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
 });
 
 export const sizeSchemaRelation = relations(sizeSchema, ({ one }) => ({

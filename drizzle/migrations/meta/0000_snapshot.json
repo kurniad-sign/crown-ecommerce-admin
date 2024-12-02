@@ -1,5 +1,5 @@
 {
-  "id": "380a5b34-3f73-4a17-a2f1-9b4868c79ab4",
+  "id": "6802b8b6-8032-45b6-b3ac-6da00b782ef7",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -32,21 +32,21 @@
           "name": "store_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "default": "uuid_generate_v4()"
         },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "default": "now()"
         },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "default": "now()"
         }
       },
@@ -287,7 +287,7 @@
           "name": "store_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "default": "uuid_generate_v4()"
         },
         "price": {
@@ -379,21 +379,21 @@
           "name": "store_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "default": "uuid_generate_v4()"
         },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "default": "now()"
         },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "default": "now()"
         }
       },
@@ -458,14 +458,14 @@
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "default": "now()"
         },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "default": "now()"
         }
       },

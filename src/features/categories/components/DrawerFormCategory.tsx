@@ -166,7 +166,7 @@ export function DrawerFormCategory({
                 defaultSelectedKeys={field.value ? [field.value] : []}
                 isLoading={isLoading}
                 isDisabled={isPending}
-                items={data?.data ?? []}
+                items={data?.categories ?? []}
                 {...field}
               >
                 {(item) => (

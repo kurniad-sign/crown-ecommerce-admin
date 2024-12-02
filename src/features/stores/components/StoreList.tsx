@@ -1,19 +1,32 @@
+'use client';
+
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Chip } from '@nextui-org/chip';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { Link } from 'nextjs13-progress';
 
 import { Text } from '~/components/atom';
 import { EmptyStates } from '~/components/molecul/EmptyStates';
+import { StoresDataType } from '~/lib/drizzle/schemas/stores';
 
 import emptyIllustration from '~/assets/images/empty-state-task.svg';
 
-import { getStores } from '../api/store.server';
+import { getStore } from '../api/get-store';
 import { StoreCreateButton } from './StoreCreateButton';
 import { StoreDeleteButton } from './StoreDeleteButton';
+import { StoreSkeleton } from './StoreSkeleton';
 
-export async function StoreList() {
-  const storeList = await getStores();
+export function StoreList() {
+  const { data, isLoading } = useSuspenseQuery({
+    queryKey: ['get-stores'],
+    queryFn: getStore,
+  });
+  const storeList = data as unknown as StoresDataType[];
+
+  if (isLoading) {
+    return <StoreSkeleton />;
+  }
 
   if (!storeList.length) {
     return (

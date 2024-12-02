@@ -10,13 +10,12 @@ import {
   ModalHeader,
   useDisclosure,
 } from '@nextui-org/react';
-import { useMutation } from '@tanstack/react-query';
 import { Trash } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 import { Text } from '~/components/atom';
 
-import { deleteStore } from '../api/store.client';
+import { useDeleteStore } from '../api/delete-store';
 
 type StoreDeleteButtonProps = {
   id: string;
@@ -27,17 +26,17 @@ export function StoreDeleteButton(props: StoreDeleteButtonProps) {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const { id } = props;
 
-  const { mutate, isPending } = useMutation({
-    mutationKey: ['delete-store'],
-    mutationFn: async (id: string) => await deleteStore(id),
-    onSuccess: () => {
-      onClose();
-      router.refresh();
-      toast.success('Store has been deleted');
-    },
-    onError: (error) => {
-      console.error(error);
-      toast.error('Error when deleting store');
+  const { mutate, isPending } = useDeleteStore({
+    mutationConfig: {
+      onSuccess: () => {
+        onClose();
+        router.refresh();
+        toast.success('Store has been deleted');
+      },
+      onError: (error) => {
+        console.error(error);
+        toast.error('Error when deleting store');
+      },
     },
   });
 

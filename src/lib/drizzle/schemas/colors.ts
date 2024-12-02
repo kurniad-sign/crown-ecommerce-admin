@@ -6,8 +6,7 @@ import { stores } from './stores';
 export const colorSchema = pgTable('colors', {
   id: uuid('id')
     .default(sql`uuid_generate_v4()`)
-    .primaryKey()
-    .notNull(),
+    .primaryKey(),
   name: varchar('name', { length: 50 }).notNull(),
   hexCode: varchar('hex_code', { length: 7 }),
   storeId: uuid('store_id')

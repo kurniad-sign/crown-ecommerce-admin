@@ -13,18 +13,16 @@ import {
   useDisclosure,
 } from '@nextui-org/modal';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
-import { PostResponse } from '~/types';
 import { Plus, X } from 'lucide-react';
 import { useRouter } from 'nextjs13-progress';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner'
 
 import { Text } from '~/components/atom';
 import { StoresDataType } from '~/lib/drizzle/schemas/stores';
 import { storeSchema, StoreSchema } from '~/lib/validations/store';
 
-import { addStore } from '../api/store.client';
+import { CreateStoreResponse, useCreateStore } from '../api/create-store';
 
 interface CreateStoreProps {
   store: StoresDataType[];
@@ -58,19 +56,17 @@ export function StoreCreateButton({ store }: CreateStoreProps) {
     }
   }, [isOpen, reset]);
 
-  const { mutate, isPending } = useMutation({
-    mutationKey: ['create-store'],
-    mutationFn: async (payload: StoreSchema) => {
-      const response = await addStore(payload);
-      return (await response.json()) as PostResponse<StoresDataType>;
-    },
-    onSuccess: (response) => {
-      console.log(response.data);
-      router.replace(`/${response.data.id}`);
-    },
-    onError: (error) => {
-      console.error(error);
-      toast.error('Error when creating store');
+  const { mutate, isPending } = useCreateStore({
+    mutationConfig: {
+      onSuccess: (response) => {
+        const { data, message } = response as unknown as CreateStoreResponse;
+        toast.success(message);
+        router.replace(`/${data.id}`);
+      },
+      onError: (error) => {
+        console.log(error);
+        toast.error('Error when creating store');
+      },
     },
   });
 

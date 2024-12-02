@@ -2,9 +2,9 @@ CREATE TABLE IF NOT EXISTS "categories" (
 	"id" uuid PRIMARY KEY DEFAULT uuid_generate_v4() NOT NULL,
 	"parent_id" uuid DEFAULT uuid_generate_v4(),
 	"name" varchar(100) NOT NULL,
-	"store_id" uuid DEFAULT uuid_generate_v4() NOT NULL,
-	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
+	"store_id" uuid DEFAULT uuid_generate_v4(),
+	"created_at" timestamp DEFAULT now(),
+	"updated_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "colors" (
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS "products" (
 	"name" varchar(100) NOT NULL,
 	"description" text,
 	"category_id" uuid DEFAULT uuid_generate_v4() NOT NULL,
-	"store_id" uuid DEFAULT uuid_generate_v4() NOT NULL,
+	"store_id" uuid DEFAULT uuid_generate_v4(),
 	"price" numeric(10, 2) NOT NULL,
 	"stock" integer NOT NULL,
 	"created_at" timestamp DEFAULT now(),
@@ -42,9 +42,9 @@ CREATE TABLE IF NOT EXISTS "sizes" (
 	"id" uuid PRIMARY KEY DEFAULT uuid_generate_v4() NOT NULL,
 	"name" varchar(50) NOT NULL,
 	"value" varchar(50) NOT NULL,
-	"store_id" uuid DEFAULT uuid_generate_v4() NOT NULL,
-	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
+	"store_id" uuid DEFAULT uuid_generate_v4(),
+	"created_at" timestamp DEFAULT now(),
+	"updated_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "stores" (
@@ -53,8 +53,8 @@ CREATE TABLE IF NOT EXISTS "stores" (
 	"user_id" varchar(255) NOT NULL,
 	"unique_store" varchar(50),
 	"store_logo_url" varchar(255),
-	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
+	"created_at" timestamp DEFAULT now(),
+	"updated_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
 DO $$ BEGIN

@@ -11,8 +11,7 @@ import { sizeSchema } from './sizes';
 export const productVariantSchema = pgTable('product_variants', {
   id: uuid('id')
     .default(sql`uuid_generate_v4()`)
-    .primaryKey()
-    .notNull(),
+    .primaryKey(),
   sizeId: uuid('size_id')
     .default(sql`uuid_generate_v4()`)
     .references(() => sizeSchema.id)

@@ -1,7 +1,13 @@
-import { honoClient } from '~/lib/hono/client';
-import { StoreSchema } from '~/lib/validations/store';
+import { z } from 'zod';
 
-export async function addStore(payload: StoreSchema) {
+import {
+  insertStoreSchema,
+} from '~/lib/drizzle/schemas/stores';
+import { honoClient } from '~/lib/hono/client';
+
+type InsertStorePayload = z.infer<typeof insertStoreSchema>;
+
+export async function addStore(payload: InsertStorePayload) {
   return await honoClient.api.stores.$post({
     json: payload,
   });
