@@ -5,33 +5,37 @@ import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
 import { Button, Input, Select, SelectItem } from '@nextui-org/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { PostResponse } from '~/types';
 import { Save } from 'lucide-react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 import { DrawerFooter, DrawerHeader, Heading } from '~/components/atom';
-import { CategoryDataType } from '~/lib/drizzle/schemas/categories';
-import { categorySchema, CategorySchema } from '~/lib/validations/categories';
-
 import {
-  addCategory,
-  getCategories,
-  updateCategory,
-} from '../api/category.client';
-import { type TableCategory } from './TableCategories';
+  CategoryDataType,
+  insertCategorySchema,
+  patchCategorySchema,
+} from '~/lib/drizzle/schemas/categories';
+
+import { useCategory } from '../api/get-category';
+import {
+  useMutateCategory,
+  type InsertCategoryPayload,
+  type MutateCategoryResponse,
+  type PatchCategoryPayload,
+} from '../api/mutate-category';
+
+type CategoryFormSchema = InsertCategoryPayload | PatchCategoryPayload;
+
+interface DrawerFormCategoryProps {
+  isOpenDrawer: boolean;
+  onCloseDrawer: () => void;
+  initialData?: CategoryDataType;
+}
 
 const Drawer = dynamic(
   () => import('~/components/atom').then((component) => component.Drawer),
   { ssr: false }
 );
-
-interface DrawerFormCategoryProps {
-  isOpenDrawer: boolean;
-  onCloseDrawer: () => void;
-  initialData?: TableCategory;
-}
 
 export function DrawerFormCategory({
   isOpenDrawer,
@@ -41,7 +45,7 @@ export function DrawerFormCategory({
   const params = useParams();
   const router = useRouter();
 
-  const initialForm: CategorySchema = {
+  const initialForm: CategoryFormSchema = {
     name: initialData?.name || '',
     parentId: initialData?.parentId || undefined,
   };
@@ -51,8 +55,10 @@ export function DrawerFormCategory({
     formState: { errors },
     handleSubmit,
     reset,
-  } = useForm<CategorySchema>({
-    resolver: zodResolver(categorySchema),
+  } = useForm<CategoryFormSchema>({
+    resolver: zodResolver(
+      !initialData ? insertCategorySchema : patchCategorySchema
+    ),
     defaultValues: initialForm,
   });
 
@@ -82,46 +88,42 @@ export function DrawerFormCategory({
     };
   }, [initialData]);
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['get-categories'],
-    queryFn: async () =>
-      await getCategories({ storeId: params.storeId as string }),
-    enabled: isOpenDrawer,
-    refetchOnMount: true,
-  });
-
-  const { mutate, isPending } = useMutation({
-    mutationKey: ['category-mutation'],
-    mutationFn: async (payload: CategorySchema) => {
-      const response = !initialData
-        ? await addCategory({
-            params: { storeId: params.storeId as string },
-            payload,
-          })
-        : await updateCategory(
-            initialData.id as string,
-            {
-              storeId: params.storeId as string,
-            },
-            payload
-          );
-      return (await response.json()) as PostResponse<CategoryDataType>;
+  const { data, isLoading } = useCategory({
+    apiConfig: {
+      params: {
+        storeId: params.storeId as string,
+      },
     },
-    onSuccess: (response) => {
-      console.log(response.data);
-      router.refresh();
-      toast.success(toastResponseMessage.success);
-      onCloseDrawer();
-      reset();
-    },
-    onError: (error) => {
-      console.error(error);
-      toast.error(toastResponseMessage.error);
+    queryConfig: {
+      enabled: isOpenDrawer,
+      refetchOnMount: true,
     },
   });
 
-  const handleSubmitCategory: SubmitHandler<CategorySchema> = (payload) => {
-    mutate(payload);
+  const categoryData = data as unknown as CategoryDataType[];
+
+  const { mutate, isPending } = useMutateCategory({
+    apiConfig: {
+      params: { storeId: params.storeId as string },
+    },
+    mutationConfig: {
+      onSuccess: (response) => {
+        const { data, message } = response as unknown as MutateCategoryResponse;
+        console.log(data);
+        router.refresh();
+        toast.success(message);
+        onCloseDrawer();
+        reset();
+      },
+      onError: (error) => {
+        console.error(error);
+        toast.error(toastResponseMessage.error);
+      },
+    },
+  });
+
+  const handleSubmitCategory: SubmitHandler<CategoryFormSchema> = (payload) => {
+    mutate({ payload });
   };
 
   return (
@@ -163,11 +165,11 @@ export function DrawerFormCategory({
                 labelPlacement="outside"
                 placeholder="Select Parent Category"
                 variant="bordered"
-                defaultSelectedKeys={field.value ? [field.value] : []}
                 isLoading={isLoading}
                 isDisabled={isPending}
-                items={data?.categories ?? []}
-                {...field}
+                items={categoryData ?? []}
+                value={field.value as string}
+                onChange={field.onChange}
               >
                 {(item) => (
                   <SelectItem key={item.id} value={item.id}>

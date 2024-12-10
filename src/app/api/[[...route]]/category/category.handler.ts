@@ -40,9 +40,10 @@ export const getCategory = factory.createHandlers(
       const categories = await db.query.categories.findMany({
         where: (category, { eq }) =>
           eq(category.storeId, query.storeId as string),
+        orderBy: ({ createdAt }, { desc }) => [desc(createdAt)],
       });
 
-      return context.json({ categories }, HttpStatusCode.OK);
+      return context.json(categories, HttpStatusCode.OK);
     } catch (error) {
       console.error(error);
       return context.json(
@@ -60,46 +61,53 @@ export const insertCategory = factory.createHandlers(
   zValidator('query', querySchema),
   zValidator('json', insertCategorySchema),
   async (context) => {
-    try {
-      const query = context.req.valid('query');
-      const body = context.req.valid('json');
-      const storeById = await db.query.stores.findFirst({
-        where: (store, { eq }) => eq(store.id, query.storeId),
-      });
+    const query = context.req.valid('query');
+    const body = context.req.valid('json');
+    const storeById = await db.query.stores.findFirst({
+      where: (store, { eq }) => eq(store.id, query.storeId),
+    });
 
-      if (!storeById) {
-        return context.json(
-          { message: 'Store not found', statusCode: HttpStatusCode.NOT_FOUND },
-          HttpStatusCode.NOT_FOUND
-        );
-      }
-      
-      const [insertedCategory] = await db
-        .insert(categoriesSchema)
-        .values({
-          name: body.name,
-          parentId: body.parentId,
-          storeId: storeById.id,
-        })
-        .returning();
-
+    if (!storeById) {
       return context.json(
-        {
-          data: insertedCategory,
-          message: 'Category created successfully',
-        },
-        HttpStatusCode.OK
-      );
-    } catch (error) {
-      console.error(error);
-      return context.json(
-        {
-          message: 'Internal Server Error',
-          statusCode: HttpStatusCode.INTERNAL_SERVER_ERROR,
-        },
-        HttpStatusCode.INTERNAL_SERVER_ERROR
+        { message: 'Store not found', statusCode: HttpStatusCode.NOT_FOUND },
+        HttpStatusCode.NOT_FOUND
       );
     }
+
+    console.log({
+      name: body.name,
+      parentId: body.parentId,
+      storeId: storeById.id,
+    });
+
+    const [insertedCategory] = await db
+      .insert(categoriesSchema)
+      .values({
+        name: body.name,
+        parentId: body.parentId,
+        storeId: storeById.id,
+      })
+      .returning();
+
+    return context.json(
+      {
+        data: insertedCategory,
+        message: 'Category created successfully',
+      },
+      HttpStatusCode.OK
+    );
+    // try {
+
+    // } catch (error) {
+    //   console.error(error);
+    //   return context.json(
+    //     {
+    //       message: 'Internal Server Error',
+    //       statusCode: HttpStatusCode.INTERNAL_SERVER_ERROR,
+    //     },
+    //     HttpStatusCode.INTERNAL_SERVER_ERROR
+    //   );
+    // }
   }
 );
 
